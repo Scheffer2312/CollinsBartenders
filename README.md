@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
@@ -6,92 +7,66 @@
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(to right, #f2f2f2, #ffffff);
-      padding: 30px;
+      background-color: #f4f4f4;
+      padding: 40px;
+      max-width: 800px;
+      margin: auto;
       color: #333;
     }
 
     h1 {
-      text-align: center;
-      color: #444;
-    }
-
-    form {
-      background-color: #fff;
-      padding: 30px;
-      max-width: 600px;
-      margin: 30px auto;
-      box-shadow: 0 0 15px rgba(0,0,0,0.1);
-      border-radius: 10px;
+      color: #000;
+      margin-bottom: 20px;
     }
 
     label {
+      font-weight: bold;
       margin-top: 15px;
       display: block;
-      font-weight: bold;
     }
 
     input, select, textarea {
       width: 100%;
       padding: 10px;
       margin-top: 5px;
-      border: 1px solid #ccc;
+      margin-bottom: 10px;
       border-radius: 5px;
-      box-sizing: border-box;
+      border: 1px solid #ccc;
+      font-size: 14px;
     }
 
     .checkbox-group {
-      display: flex;
-      gap: 15px;
       margin-top: 10px;
     }
 
+    .checkbox-group label {
+      font-weight: normal;
+      margin-right: 20px;
+    }
+
     button {
-      padding: 10px 20px;
-      margin-top: 20px;
-      margin-right: 10px;
+      background-color: #000;
+      color: #fff;
+      padding: 10px 25px;
       border: none;
       border-radius: 5px;
       cursor: pointer;
-      font-weight: bold;
+      margin-top: 10px;
+      margin-right: 10px;
     }
 
-    .gerar {
-      background-color: #3498db;
-      color: white;
-    }
-
-    .aceitar {
-      background-color: #2ecc71;
-      color: white;
-    }
-
-    .recusar {
-      background-color: #e74c3c;
-      color: white;
-    }
-
-    .enviarJustificativa {
-      background-color: #f39c12;
-      color: white;
+    #orcamentoResultado {
+      background-color: #fff;
+      border: 1px solid #ccc;
+      padding: 20px;
+      margin-top: 20px;
+      border-radius: 5px;
+      display: none;
     }
 
     #justificativa-container {
-      display: none;
-      margin-top: 20px;
-    }
-
-    #resumoOrcamento {
-      background: #f9f9f9;
-      border: 1px solid #ccc;
-      padding: 15px;
-      border-radius: 5px;
       margin-top: 20px;
       display: none;
-    }
-
-    #resumoOrcamento p {
-      margin: 5px 0;
     }
   </style>
 </head>
@@ -136,52 +111,72 @@
     <label for="whatsappCliente">Seu número de WhatsApp:</label>
     <input type="text" id="whatsappCliente" placeholder="Ex: 65 91234-5678" required>
 
-    <button type="button" class="gerar" onclick="gerarOrcamento()">Gerar Orçamento</button>
+    <button type="button" onclick="gerarOrcamento()">Gerar Orçamento</button>
+    <button type="button" onclick="enviarWhatsApp(true)">Aceitar Proposta</button>
+    <button type="button" onclick="mostrarJustificativa()">Recusar Proposta</button>
 
-    <div id="resumoOrcamento"></div>
-
-    <button type="button" class="aceitar" onclick="enviarWhatsApp(true)">Aceitar Proposta</button>
-    <button type="button" class="recusar" onclick="mostrarJustificativa()">Recusar Proposta</button>
+    <div id="orcamentoResultado"></div>
 
     <div id="justificativa-container">
       <label for="justificativa">O que podemos melhorar?</label>
       <textarea id="justificativa" rows="4" placeholder="Digite aqui sua justificativa..."></textarea>
-      <button type="button" class="enviarJustificativa" onclick="enviarWhatsApp(false)">Enviar Justificativa</button>
+      <button type="button" onclick="enviarWhatsApp(false)">Enviar Justificativa</button>
     </div>
   </form>
 
   <script>
+    function getTipoDrink() {
+      if (document.getElementById("ambos").checked) return "Ambos";
+      if (document.getElementById("alcool").checked && document.getElementById("semAlcool").checked) return "Ambos";
+      if (document.getElementById("alcool").checked) return "Com Álcool";
+      if (document.getElementById("semAlcool").checked) return "Sem Álcool";
+      return "Não especificado";
+    }
+
     function gerarOrcamento() {
       const nome = document.getElementById("nome").value;
       const data = document.getElementById("data").value;
       const tipoEvento = document.getElementById("tipoEvento").value;
       const localEvento = document.getElementById("localEvento").value;
-      const convidados = document.getElementById("convidados").value;
+      const convidados = parseInt(document.getElementById("convidados").value);
       const pacote = document.getElementById("pacote").value;
-      const alcool = document.getElementById("alcool").checked ? "Sim" : "Não";
-      const semAlcool = document.getElementById("semAlcool").checked ? "Sim" : "Não";
-      const ambos = document.getElementById("ambos").checked ? "Sim" : "Não";
+      const tipoDrink = getTipoDrink();
       const outrasBebidas = document.getElementById("outrasBebidas").value;
       const whatsappCliente = document.getElementById("whatsappCliente").value;
 
-      const resumo = `
-        <h3>Resumo do Orçamento:</h3>
+      let valor = 0;
+
+      const tabela = {
+        "Básico": [1100, 1400, 1600, 1800, 2000, 2400, 2800],
+        "Padrão": [1300, 1600, 1800, 2000, 2200, 2600, 3200],
+        "Premium": [1900, 2600, 2800, 3000, 3300, 3900, 4700]
+      };
+
+      const faixas = [30, 50, 70, 90, 110, 130, 150];
+
+      for (let i = 0; i < faixas.length; i++) {
+        if (convidados <= faixas[i]) {
+          valor = tabela[pacote][i];
+          break;
+        }
+      }
+
+      const resultado = `
+        <h3>Orçamento Gerado:</h3>
         <p><strong>Nome:</strong> ${nome}</p>
-        <p><strong>Data do Evento:</strong> ${data}</p>
+        <p><strong>Data:</strong> ${data}</p>
         <p><strong>Tipo de Evento:</strong> ${tipoEvento}</p>
         <p><strong>Local do Evento:</strong> ${localEvento}</p>
         <p><strong>Convidados:</strong> ${convidados}</p>
-        <p><strong>Pacote Escolhido:</strong> ${pacote}</p>
-        <p><strong>Drinks com Álcool:</strong> ${alcool}</p>
-        <p><strong>Drinks sem Álcool:</strong> ${semAlcool}</p>
-        <p><strong>Ambos:</strong> ${ambos}</p>
-        <p><strong>Outras Bebidas:</strong> ${outrasBebidas}</p>
+        <p><strong>Pacote:</strong> ${pacote}</p>
+        <p><strong>Tipo de Drinks:</strong> ${tipoDrink}</p>
+        <p><strong>Outras bebidas no local:</strong> ${outrasBebidas}</p>
+        <p><strong>Valor do Orçamento:</strong> R$ ${valor.toFixed(2).replace('.', ',')}</p>
         <p><strong>WhatsApp:</strong> ${whatsappCliente}</p>
       `;
 
-      const resumoDiv = document.getElementById("resumoOrcamento");
-      resumoDiv.innerHTML = resumo;
-      resumoDiv.style.display = "block";
+      document.getElementById("orcamentoResultado").innerHTML = resultado;
+      document.getElementById("orcamentoResultado").style.display = "block";
     }
 
     function montarMensagem() {
@@ -191,25 +186,36 @@
       const localEvento = document.getElementById("localEvento").value;
       const convidados = document.getElementById("convidados").value;
       const pacote = document.getElementById("pacote").value;
-      const alcool = document.getElementById("alcool").checked ? "Sim" : "Não";
-      const semAlcool = document.getElementById("semAlcool").checked ? "Sim" : "Não";
-      const ambos = document.getElementById("ambos").checked ? "Sim" : "Não";
+      const tipoDrink = getTipoDrink();
       const outrasBebidas = document.getElementById("outrasBebidas").value;
       const whatsappCliente = document.getElementById("whatsappCliente").value;
       const justificativa = document.getElementById("justificativa").value;
+
+      let valor = 0;
+      const tabela = {
+        "Básico": [1100, 1400, 1600, 1800, 2000, 2400, 2800],
+        "Padrão": [1300, 1600, 1800, 2000, 2200, 2600, 3200],
+        "Premium": [1900, 2600, 2800, 3000, 3300, 3900, 4700]
+      };
+      const faixas = [30, 50, 70, 90, 110, 130, 150];
+      for (let i = 0; i < faixas.length; i++) {
+        if (convidados <= faixas[i]) {
+          valor = tabela[pacote][i];
+          break;
+        }
+      }
 
       let mensagem = "Olá! Recebi uma solicitação de orçamento:\n\n";
       mensagem += `Nome: ${nome}\n`;
       mensagem += `Data do Evento: ${data}\n`;
       mensagem += `Tipo de Evento: ${tipoEvento}\n`;
       mensagem += `Local do Evento: ${localEvento}\n`;
-      mensagem += `Número de Convidados: ${convidados}\n`;
-      mensagem += `Pacote Escolhido: ${pacote}\n`;
-      mensagem += `Drinks com Álcool: ${alcool}\n`;
-      mensagem += `Drinks sem Álcool: ${semAlcool}\n`;
-      mensagem += `Ambos: ${ambos}\n`;
+      mensagem += `Convidados: ${convidados}\n`;
+      mensagem += `Pacote: ${pacote}\n`;
+      mensagem += `Tipo de Drinks: ${tipoDrink}\n`;
       mensagem += `Outras bebidas no local: ${outrasBebidas}\n`;
       mensagem += `WhatsApp do cliente: ${whatsappCliente}\n`;
+      mensagem += `Valor: R$ ${valor.toFixed(2).replace('.', ',')}\n`;
 
       if (justificativa) {
         mensagem += `\nMotivo da recusa: ${justificativa}`;
@@ -221,7 +227,7 @@
     function enviarWhatsApp(aceito) {
       const numeroDestino = "5565992887213";
       const mensagem = montarMensagem();
-      const link = "https://wa.me/" + numeroDestino + "?text=" + mensagem;
+      const link = `https://wa.me/${numeroDestino}?text=${mensagem}`;
       window.open(link, "_blank");
     }
 
