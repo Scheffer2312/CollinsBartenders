@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
@@ -210,7 +210,7 @@
         alert("Por favor, gere o orçamento primeiro.");
         return;
       }
-      const url = `https://wa.me/5599999999999?text=${encodeURIComponent("Proposta aceita!\n\n" + ultimoOrcamento)}`;
+      const url = `https://wa.me/5565992887213?text=${encodeURIComponent("Proposta aceita!\n\n" + ultimoOrcamento)}`;
       window.open(url, "_blank");
     }
 
