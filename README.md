@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
@@ -81,6 +80,19 @@
       display: none;
       margin-top: 20px;
     }
+
+    #resumoOrcamento {
+      background: #f9f9f9;
+      border: 1px solid #ccc;
+      padding: 15px;
+      border-radius: 5px;
+      margin-top: 20px;
+      display: none;
+    }
+
+    #resumoOrcamento p {
+      margin: 5px 0;
+    }
   </style>
 </head>
 <body>
@@ -125,6 +137,9 @@
     <input type="text" id="whatsappCliente" placeholder="Ex: 65 91234-5678" required>
 
     <button type="button" class="gerar" onclick="gerarOrcamento()">Gerar Orçamento</button>
+
+    <div id="resumoOrcamento"></div>
+
     <button type="button" class="aceitar" onclick="enviarWhatsApp(true)">Aceitar Proposta</button>
     <button type="button" class="recusar" onclick="mostrarJustificativa()">Recusar Proposta</button>
 
@@ -137,7 +152,36 @@
 
   <script>
     function gerarOrcamento() {
-      alert("Seu orçamento será gerado com base nas informações preenchidas.");
+      const nome = document.getElementById("nome").value;
+      const data = document.getElementById("data").value;
+      const tipoEvento = document.getElementById("tipoEvento").value;
+      const localEvento = document.getElementById("localEvento").value;
+      const convidados = document.getElementById("convidados").value;
+      const pacote = document.getElementById("pacote").value;
+      const alcool = document.getElementById("alcool").checked ? "Sim" : "Não";
+      const semAlcool = document.getElementById("semAlcool").checked ? "Sim" : "Não";
+      const ambos = document.getElementById("ambos").checked ? "Sim" : "Não";
+      const outrasBebidas = document.getElementById("outrasBebidas").value;
+      const whatsappCliente = document.getElementById("whatsappCliente").value;
+
+      const resumo = `
+        <h3>Resumo do Orçamento:</h3>
+        <p><strong>Nome:</strong> ${nome}</p>
+        <p><strong>Data do Evento:</strong> ${data}</p>
+        <p><strong>Tipo de Evento:</strong> ${tipoEvento}</p>
+        <p><strong>Local do Evento:</strong> ${localEvento}</p>
+        <p><strong>Convidados:</strong> ${convidados}</p>
+        <p><strong>Pacote Escolhido:</strong> ${pacote}</p>
+        <p><strong>Drinks com Álcool:</strong> ${alcool}</p>
+        <p><strong>Drinks sem Álcool:</strong> ${semAlcool}</p>
+        <p><strong>Ambos:</strong> ${ambos}</p>
+        <p><strong>Outras Bebidas:</strong> ${outrasBebidas}</p>
+        <p><strong>WhatsApp:</strong> ${whatsappCliente}</p>
+      `;
+
+      const resumoDiv = document.getElementById("resumoOrcamento");
+      resumoDiv.innerHTML = resumo;
+      resumoDiv.style.display = "block";
     }
 
     function montarMensagem() {
