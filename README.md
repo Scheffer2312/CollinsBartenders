@@ -9,7 +9,7 @@
       font-family: 'Segoe UI', sans-serif;
       padding: 0;
       margin: 0;
-      background-color: #f5f5f5;
+      background-color: #f4f4f4;
       color: #333;
     }
 
@@ -62,10 +62,16 @@
       font-size: 14px;
     }
 
-    input[type="checkbox"] {
-      width: auto;
-      display: inline-block;
-      margin-right: 8px;
+    .radio-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .radio-group label {
+      display: flex;
+      align-items: center;
+      gap: 5px;
     }
 
     button {
@@ -85,6 +91,14 @@
     }
 
     #justificativa-container {
+      margin-top: 20px;
+      display: none;
+    }
+
+    #resumoOrcamento {
+      background-color: #f0f0f0;
+      padding: 15px;
+      border-radius: 5px;
       margin-top: 20px;
       display: none;
     }
@@ -133,8 +147,11 @@
       </select>
 
       <label>Tipo de Drinks:</label>
-      <input type="checkbox" id="alcool"> Com Álcool
-      <input type="checkbox" id="semAlcool"> Sem Álcool
+      <div class="radio-group">
+        <label><input type="radio" name="tipoDrink" value="Com Álcool" required>Com Álcool</label>
+        <label><input type="radio" name="tipoDrink" value="Sem Álcool">Sem Álcool</label>
+        <label><input type="radio" name="tipoDrink" value="Ambos">Ambos</label>
+      </div>
 
       <label for="outrasBebidas">Haverá outras bebidas no local?</label>
       <select id="outrasBebidas">
@@ -145,6 +162,7 @@
       <label for="whatsappCliente">Seu número de WhatsApp:</label>
       <input type="text" id="whatsappCliente" placeholder="Ex: 65 91234-5678" required>
 
+      <button type="button" onclick="gerarResumo()">Gerar Orçamento</button>
       <button type="button" onclick="enviarWhatsApp(true)">Aceitar Proposta</button>
       <button type="button" onclick="mostrarJustificativa()">Recusar Proposta</button>
 
@@ -153,6 +171,8 @@
         <textarea id="justificativa" rows="4" placeholder="Digite aqui sua justificativa..."></textarea>
         <button type="button" onclick="enviarWhatsApp(false)">Enviar Justificativa</button>
       </div>
+
+      <div id="resumoOrcamento"></div>
     </form>
   </div>
 
@@ -168,8 +188,7 @@
       const localEvento = document.getElementById("localEvento").value;
       const convidados = document.getElementById("convidados").value;
       const pacote = document.getElementById("pacote").value;
-      const alcool = document.getElementById("alcool").checked ? "Sim" : "Não";
-      const semAlcool = document.getElementById("semAlcool").checked ? "Sim" : "Não";
+      const tipoDrink = document.querySelector('input[name="tipoDrink"]:checked')?.value || "Não informado";
       const outrasBebidas = document.getElementById("outrasBebidas").value;
       const whatsappCliente = document.getElementById("whatsappCliente").value;
       const justificativa = document.getElementById("justificativa").value;
@@ -181,8 +200,7 @@
       mensagem += `Local do Evento: ${localEvento}\n`;
       mensagem += `Convidados: ${convidados}\n`;
       mensagem += `Pacote: ${pacote}\n`;
-      mensagem += `Drinks com álcool: ${alcool}\n`;
-      mensagem += `Drinks sem álcool: ${semAlcool}\n`;
+      mensagem += `Tipo de Drinks: ${tipoDrink}\n`;
       mensagem += `Outras bebidas no local: ${outrasBebidas}\n`;
       mensagem += `WhatsApp do cliente: ${whatsappCliente}\n`;
 
@@ -202,6 +220,26 @@
 
     function mostrarJustificativa() {
       document.getElementById("justificativa-container").style.display = "block";
+    }
+
+    function gerarResumo() {
+      const nome = document.getElementById("nome").value;
+      const convidados = document.getElementById("convidados").value;
+      const pacote = document.getElementById("pacote").value;
+
+      // (Exemplo de valores fictícios — pode ser integrado com regras reais se quiser)
+      let valor = 0;
+      if (pacote === "Básico") {
+        valor = convidados * 25;
+      } else if (pacote === "Padrão") {
+        valor = convidados * 40;
+      } else if (pacote === "Premium") {
+        valor = convidados * 60;
+      }
+
+      const resumo = document.getElementById("resumoOrcamento");
+      resumo.style.display = "block";
+      resumo.innerText = `Olá, ${nome}! O valor estimado para ${convidados} convidados no pacote ${pacote} é de R$ ${valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})}.`;
     }
   </script>
 
