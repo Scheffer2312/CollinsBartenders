@@ -6,181 +6,140 @@
   <title>Orçamento - Collins Bartenders</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      padding: 0;
-      margin: 0;
-      background-color: #f4f4f4;
-      color: #333;
-    }
-
-    header {
-      background-color: #000;
-      padding: 20px;
-      text-align: center;
-    }
-
-    header img.logo {
-      height: 80px;
-    }
-
-    .hero {
-      width: 100%;
-      max-height: 400px;
-      overflow: hidden;
-    }
-
-    .hero img {
-      width: 100%;
-      object-fit: cover;
-    }
-
-    .container {
-      max-width: 700px;
-      margin: 30px auto;
-      background-color: white;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #f2f2f2, #ffffff);
       padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      color: #333;
     }
 
     h1 {
       text-align: center;
-      color: #000;
-      margin-bottom: 20px;
+      color: #444;
     }
 
-    label, select, input, textarea {
-      display: block;
+    form {
+      background-color: #fff;
+      padding: 30px;
+      max-width: 600px;
+      margin: 30px auto;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      border-radius: 10px;
+    }
+
+    label {
       margin-top: 15px;
-      width: 100%;
+      display: block;
+      font-weight: bold;
     }
 
     input, select, textarea {
+      width: 100%;
       padding: 10px;
+      margin-top: 5px;
       border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 14px;
+      border-radius: 5px;
+      box-sizing: border-box;
     }
 
-    .radio-group {
+    .checkbox-group {
       display: flex;
-      gap: 10px;
+      gap: 15px;
       margin-top: 10px;
     }
 
-    .radio-group label {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
     button {
-      padding: 12px 20px;
+      padding: 10px 20px;
       margin-top: 20px;
       margin-right: 10px;
-      background-color: #000;
-      color: white;
       border: none;
       border-radius: 5px;
       cursor: pointer;
-      font-size: 16px;
+      font-weight: bold;
     }
 
-    button:hover {
-      background-color: #444;
+    .gerar {
+      background-color: #3498db;
+      color: white;
+    }
+
+    .aceitar {
+      background-color: #2ecc71;
+      color: white;
+    }
+
+    .recusar {
+      background-color: #e74c3c;
+      color: white;
+    }
+
+    .enviarJustificativa {
+      background-color: #f39c12;
+      color: white;
     }
 
     #justificativa-container {
-      margin-top: 20px;
       display: none;
-    }
-
-    #resumoOrcamento {
-      background-color: #f0f0f0;
-      padding: 15px;
-      border-radius: 5px;
       margin-top: 20px;
-      display: none;
-    }
-
-    footer {
-      text-align: center;
-      margin: 40px 0 20px;
-      font-size: 14px;
-      color: #777;
     }
   </style>
 </head>
 <body>
+  <h1>Solicitação de Orçamento - Collins Bartenders</h1>
+  <form id="orcamentoForm">
+    <label for="nome">Nome:</label>
+    <input type="text" id="nome" required>
 
-  <header>
-    <img src="/mnt/data/Logo.JPG" alt="Logo Collins Bartenders" class="logo" />
-  </header>
+    <label for="data">Data do Evento:</label>
+    <input type="date" id="data" required>
 
-  <div class="hero">
-    <img src="/mnt/data/Balcao.JPG" alt="Balcão de Bar" />
-  </div>
+    <label for="tipoEvento">Tipo de Evento:</label>
+    <input type="text" id="tipoEvento" placeholder="Casamento, Aniversário..." required>
 
-  <div class="container">
-    <h1>Solicitação de Orçamento</h1>
-    <form id="orcamentoForm">
-      <label for="nome">Nome:</label>
-      <input type="text" id="nome" required>
+    <label for="localEvento">Local do Evento:</label>
+    <input type="text" id="localEvento" required>
 
-      <label for="data">Data do Evento:</label>
-      <input type="date" id="data" required>
+    <label for="convidados">Número de Convidados:</label>
+    <input type="number" id="convidados" required>
 
-      <label for="tipoEvento">Tipo de Evento:</label>
-      <input type="text" id="tipoEvento" placeholder="Casamento, Aniversário, etc." required>
+    <label for="pacote">Pacote:</label>
+    <select id="pacote" required>
+      <option value="Básico">Básico</option>
+      <option value="Padrão">Padrão</option>
+      <option value="Premium">Premium</option>
+    </select>
 
-      <label for="localEvento">Local do Evento:</label>
-      <input type="text" id="localEvento" required>
+    <label>Tipo de Drinks:</label>
+    <div class="checkbox-group">
+      <label><input type="checkbox" id="alcool"> Com Álcool</label>
+      <label><input type="checkbox" id="semAlcool"> Sem Álcool</label>
+      <label><input type="checkbox" id="ambos"> Ambos</label>
+    </div>
 
-      <label for="convidados">Número de Convidados:</label>
-      <input type="number" id="convidados" required>
+    <label for="outrasBebidas">Haverá outras bebidas no local?</label>
+    <select id="outrasBebidas">
+      <option value="Sim">Sim</option>
+      <option value="Não">Não</option>
+    </select>
 
-      <label for="pacote">Pacote:</label>
-      <select id="pacote" required>
-        <option value="Básico">Básico</option>
-        <option value="Padrão">Padrão</option>
-        <option value="Premium">Premium</option>
-      </select>
+    <label for="whatsappCliente">Seu número de WhatsApp:</label>
+    <input type="text" id="whatsappCliente" placeholder="Ex: 65 91234-5678" required>
 
-      <label>Tipo de Drinks:</label>
-      <div class="radio-group">
-        <label><input type="radio" name="tipoDrink" value="Com Álcool" required>Com Álcool</label>
-        <label><input type="radio" name="tipoDrink" value="Sem Álcool">Sem Álcool</label>
-        <label><input type="radio" name="tipoDrink" value="Ambos">Ambos</label>
-      </div>
+    <button type="button" class="gerar" onclick="gerarOrcamento()">Gerar Orçamento</button>
+    <button type="button" class="aceitar" onclick="enviarWhatsApp(true)">Aceitar Proposta</button>
+    <button type="button" class="recusar" onclick="mostrarJustificativa()">Recusar Proposta</button>
 
-      <label for="outrasBebidas">Haverá outras bebidas no local?</label>
-      <select id="outrasBebidas">
-        <option value="Sim">Sim</option>
-        <option value="Não">Não</option>
-      </select>
-
-      <label for="whatsappCliente">Seu número de WhatsApp:</label>
-      <input type="text" id="whatsappCliente" placeholder="Ex: 65 91234-5678" required>
-
-      <button type="button" onclick="gerarResumo()">Gerar Orçamento</button>
-      <button type="button" onclick="enviarWhatsApp(true)">Aceitar Proposta</button>
-      <button type="button" onclick="mostrarJustificativa()">Recusar Proposta</button>
-
-      <div id="justificativa-container">
-        <label for="justificativa">O que podemos melhorar?</label>
-        <textarea id="justificativa" rows="4" placeholder="Digite aqui sua justificativa..."></textarea>
-        <button type="button" onclick="enviarWhatsApp(false)">Enviar Justificativa</button>
-      </div>
-
-      <div id="resumoOrcamento"></div>
-    </form>
-  </div>
-
-  <footer>
-    &copy; 2025 Collins Bartenders | contato: (65) 99288-7213
-  </footer>
+    <div id="justificativa-container">
+      <label for="justificativa">O que podemos melhorar?</label>
+      <textarea id="justificativa" rows="4" placeholder="Digite aqui sua justificativa..."></textarea>
+      <button type="button" class="enviarJustificativa" onclick="enviarWhatsApp(false)">Enviar Justificativa</button>
+    </div>
+  </form>
 
   <script>
+    function gerarOrcamento() {
+      alert("Seu orçamento será gerado com base nas informações preenchidas.");
+    }
+
     function montarMensagem() {
       const nome = document.getElementById("nome").value;
       const data = document.getElementById("data").value;
@@ -188,7 +147,9 @@
       const localEvento = document.getElementById("localEvento").value;
       const convidados = document.getElementById("convidados").value;
       const pacote = document.getElementById("pacote").value;
-      const tipoDrink = document.querySelector('input[name="tipoDrink"]:checked')?.value || "Não informado";
+      const alcool = document.getElementById("alcool").checked ? "Sim" : "Não";
+      const semAlcool = document.getElementById("semAlcool").checked ? "Sim" : "Não";
+      const ambos = document.getElementById("ambos").checked ? "Sim" : "Não";
       const outrasBebidas = document.getElementById("outrasBebidas").value;
       const whatsappCliente = document.getElementById("whatsappCliente").value;
       const justificativa = document.getElementById("justificativa").value;
@@ -198,9 +159,11 @@
       mensagem += `Data do Evento: ${data}\n`;
       mensagem += `Tipo de Evento: ${tipoEvento}\n`;
       mensagem += `Local do Evento: ${localEvento}\n`;
-      mensagem += `Convidados: ${convidados}\n`;
-      mensagem += `Pacote: ${pacote}\n`;
-      mensagem += `Tipo de Drinks: ${tipoDrink}\n`;
+      mensagem += `Número de Convidados: ${convidados}\n`;
+      mensagem += `Pacote Escolhido: ${pacote}\n`;
+      mensagem += `Drinks com Álcool: ${alcool}\n`;
+      mensagem += `Drinks sem Álcool: ${semAlcool}\n`;
+      mensagem += `Ambos: ${ambos}\n`;
       mensagem += `Outras bebidas no local: ${outrasBebidas}\n`;
       mensagem += `WhatsApp do cliente: ${whatsappCliente}\n`;
 
@@ -221,27 +184,6 @@
     function mostrarJustificativa() {
       document.getElementById("justificativa-container").style.display = "block";
     }
-
-    function gerarResumo() {
-      const nome = document.getElementById("nome").value;
-      const convidados = document.getElementById("convidados").value;
-      const pacote = document.getElementById("pacote").value;
-
-      // (Exemplo de valores fictícios — pode ser integrado com regras reais se quiser)
-      let valor = 0;
-      if (pacote === "Básico") {
-        valor = convidados * 25;
-      } else if (pacote === "Padrão") {
-        valor = convidados * 40;
-      } else if (pacote === "Premium") {
-        valor = convidados * 60;
-      }
-
-      const resumo = document.getElementById("resumoOrcamento");
-      resumo.style.display = "block";
-      resumo.innerText = `Olá, ${nome}! O valor estimado para ${convidados} convidados no pacote ${pacote} é de R$ ${valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})}.`;
-    }
   </script>
-
 </body>
 </html>
